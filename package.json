@@ -1,8 +1,12 @@
 {
   "name": "s3-emails-to-mongo",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Index email objects stored on AWS S3 from AWS SES into your own Mongo database. Removes objects from AWS bucket.",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zhillb/s3-emails-to-mongo.git"
+  },
   "author": "Zachary Hill <zach@zacharyhill.xyz>",
   "license": "MIT",
   "dependencies": {
