@@ -1,0 +1,14 @@
+{
+  "name": "s3-emails-to-mongo",
+  "version": "1.0.3",
+  "description": "Index email objects stored on AWS S3 from AWS SES into your own Mongo database. Removes objects from AWS bucket.",
+  "main": "index.js",
+  "author": "Zachary Hill <zach@zacharyhill.xyz>",
+  "license": "MIT",
+  "dependencies": {
+    "aws-sdk": "^2.94.0",
+    "mailparser": "^2.0.5",
+    "mongoose": "^4.11.6",
+    "util": "^0.10.3"
+  }
+}
