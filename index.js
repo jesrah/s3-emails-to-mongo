@@ -119,6 +119,7 @@ const getParsedEmailObj = (emailObj) => {
                 references: parsedEmail.headers.get('references'),
                 text: parsedEmail.text,
                 attachments: parsedEmail.attachments,
+                type: 'inbound',
                 AWSKey: emailObj.AWSKey,
             })
         })
