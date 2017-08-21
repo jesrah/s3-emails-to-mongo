@@ -120,6 +120,7 @@ const getParsedEmailObj = (emailObj) => {
                 text: parsedEmail.text,
                 attachments: parsedEmail.attachments,
                 type: 'inbound',
+                unread: 'true',
                 AWSKey: emailObj.AWSKey,
             })
         })
