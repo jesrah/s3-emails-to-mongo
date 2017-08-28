@@ -32,12 +32,16 @@ getNewMessages()
 
 Callback Example
 ```javascript
-getNewMessages((messages) => {
-	if (!messages.length) {
-                console.log('no new messages!');
-        }
-        else {
-                console.log('new messages added to DB!\n\n', messages);
-        }
+getNewMessages((messages, err) => {
+  if (!err) {
+  	if (!messages.length) {
+      console.log('no new messages!');
+    }
+    else {
+      console.log('new messages added to DB!\n\n', messages);
+    }
+  } else {
+    console.log('err', err);
+  }
 });
 ```

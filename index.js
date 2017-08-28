@@ -114,7 +114,10 @@ const getNewMessages = (callback) => {
     .then(parseEmailsToObjs)
     .then(saveToDB)
     .then((data) => {
-        callback(data);
+        callback(data, null);
+    })
+    .catch((err) => {
+      callback(null, err);
     })
   }
 };
