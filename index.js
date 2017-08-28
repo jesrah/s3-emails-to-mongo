@@ -12,6 +12,7 @@ const s3 = new AWS.S3();
 s3.listObjects = promisify(s3.listObjects);
 s3.getObject = promisify(s3.getObject);
 s3.deleteObject = promisify(s3.deleteObject);
+Mail.find = promisify(Mail.find);
 // options for config
 let bucketName = '';
 let configSet = false;
@@ -19,26 +20,31 @@ let dbName = '';
 
 const addDBRecord = (emailObj) => {
     return new Promise((fulfill, reject) => {
-        Mail.find({
-            messageId: emailObj.messageId
-        })
-        .then((docs) => {
-            if (!docs.length) {
-                const newMail = Mail(emailObj);
-                newMail.save = promisify(newMail.save);
-                newMail.save()
-                .then((data) => {
-                    fulfill(emailObj);
-                })
-                .catch((err) => {
-                    reject(err);
-                });
-            }
+        if (configSet) {
+            Mail.find({
+                messageId: emailObj.messageId
+            })
+            .then((docs) => {
+                if (!docs.length) {
+                    const newMail = Mail(emailObj);
+                    newMail.save = promisify(newMail.save);
+                    newMail.save()
+                    .then((data) => {
+                        fulfill(emailObj);
+                    })
+                    .catch((err) => {
+                        reject(err);
+                    });
+                }
 
-        })
-        .catch((err) => {
-            reject(err);
-        });
+            })
+            .catch((err) => {
+                reject(err);
+            });
+        }
+        else {
+             console.log('s3-emails-to-mongo config not run');
+        }
     })
 }
 
@@ -87,7 +93,8 @@ const getEmailFromKey = (key) => {
     });
 };
 
-const getNewMessages = () => {
+const getNewMessages = (callback) => {
+  if(!callback) {
     return new Promise((fulfill, reject) => {
         getAllObjKeys()
         .then(turnKeysIntoEmails)
@@ -100,6 +107,16 @@ const getNewMessages = () => {
             reject(err);
         })
     });
+  }
+  else if (typeof(callback) === 'function') {
+    getAllObjKeys()
+    .then(turnKeysIntoEmails)
+    .then(parseEmailsToObjs)
+    .then(saveToDB)
+    .then((data) => {
+        callback(data);
+    })
+  }
 };
 
 const getParsedEmailObj = (emailObj) => {
@@ -120,7 +137,6 @@ const getParsedEmailObj = (emailObj) => {
                 text: parsedEmail.text,
                 attachments: parsedEmail.attachments,
                 type: 'inbound',
-                unread: 'true',
                 AWSKey: emailObj.AWSKey,
             })
         })

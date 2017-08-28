@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const promisify = require('util').promisify;
 
 const mailSchema = mongoose.Schema({
     from: String,
@@ -15,10 +14,13 @@ const mailSchema = mongoose.Schema({
     text: String,
     attachments: Array,
     type: String,
+    unread: {
+        type: Boolean,
+        default: true,
+    },
 });
 
 const Mail = mongoose.model('Mail', mailSchema);
-Mail.find = promisify(Mail.find);
 
 const connect = (dbName) => {
     mongoose.connect('mongodb://localhost/' + dbName, {
