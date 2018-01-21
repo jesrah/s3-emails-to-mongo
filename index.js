@@ -42,12 +42,3 @@ const configureOptions = function(options) {
 
 module.exports = processNewMail;
 module.exports.configure = configureOptions;
-
-
-// test code
-
-configureOptions({
-    Bucket: 'zhillb-mail'
-});
-
-processNewMail().then(console.log);
