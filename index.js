@@ -1,7 +1,6 @@
-const bucket = require('./bucket');
+const getEmails = require('s3-emails');
 const configure = require('./config');
 const db = require('./db');
-const parse = require('./parseMail');
 
 let config;
 
@@ -11,11 +10,11 @@ const processNewMail = function(optionalCallback) {
     }
     else {
 
-        const results = bucket.getKeys()
-            .then(bucket.getEmailsFromKeys)
-            .then(parse)
-            .then(db.save)
-            .then(bucket.removeFromBucket);
+        const results = getEmails({
+            Bucket: config.Bucket,
+            removeFromBucket: true,
+        })
+            .then(db.save);
 
 
         // process with promise
@@ -36,7 +35,6 @@ const processNewMail = function(optionalCallback) {
 
 const configureOptions = function(options) {
     config = configure(options);
-    bucket.setName(config.Bucket);
     db.setDB(config.DB);
     db.setSchema(config.MailSchema);
     return config;
@@ -44,3 +42,12 @@ const configureOptions = function(options) {
 
 module.exports = processNewMail;
 module.exports.configure = configureOptions;
+
+
+// test code
+
+configureOptions({
+    Bucket: 'zhillb-mail'
+});
+
+processNewMail().then(console.log);
