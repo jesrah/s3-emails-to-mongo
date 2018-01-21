@@ -23,8 +23,6 @@
   },
   "homepage": "https://github.com/zacharyhill/s3-emails-to-mongo#readme",
   "dependencies": {
-    "aws-sdk": "^2.3.0",
-    "mailparser": "^2.1.0",
     "mongoose": "^4.13.9",
     "s3-emails": "^1.0.1"
   },
